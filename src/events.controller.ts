@@ -45,5 +45,7 @@ export class EventsController {
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id) {}
+  remove(@Param('id') id) {
+    this.events = this.events.filter((event) => event.id !== parseInt(id));
+  }
 }
