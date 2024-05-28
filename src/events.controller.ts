@@ -7,10 +7,6 @@ import { Event } from './event.entity';
 @Controller('/events')
 export class EventsController {
   private events: Event[] = [];
-  //   [
-  //     { id: 1, name: 'First event' },
-  //     { id: 2, name: 'Second event' },
-  //   ]
   @Get()
   findAll() {
     return this.events;
@@ -18,7 +14,6 @@ export class EventsController {
 
   @Get(':id')
   findOne(@Param('id') id) {
-    // return { id: 1, name: 'First event' };
     const event = this.events.find((event) => event.id === parseInt(id));
 
     return event;
@@ -38,7 +33,14 @@ export class EventsController {
 
   @Patch(':id')
   update(@Param('id') id, @Body() input: UpdateEventDto) {
-    return input;
+    const index = this.events.findIndex((event) => event.id === parseInt(id));
+
+    this.events[index] = {
+      ...this.events[index],
+      ...input,
+      when: input.when ? new Date(input.when) : this.events[index].when,
+    };
+    return this.events[index];
   }
 
   @Delete(':id')
